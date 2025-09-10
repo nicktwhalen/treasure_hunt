@@ -9,6 +9,7 @@ import TitleInput from "../../../components/ui/TitleInput";
 import ClueTextArea from "../../../components/ui/ClueTextArea";
 import LoadingState from "../../../components/layout/LoadingState";
 import ErrorState from "../../../components/layout/ErrorState";
+import QrImage from "../../../components/QrImage/QrImage";
 import styles from "./HuntDetail.module.css";
 
 interface LocalTreasure {
@@ -91,25 +92,12 @@ const TreasureCard = React.memo<{
               <p>QR code will be generated after saving</p>
             </div>
           ) : (
-            <a
-              href={api.getTreasureQrUrl(
-                isCreating ? 0 : originalHunt!.id,
-                treasure.originalId!,
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.qrImageLink}
-              title="Click to view QR code in full size"
-            >
-              <img
-                src={api.getTreasureQrUrl(
-                  isCreating ? 0 : originalHunt!.id,
-                  treasure.originalId!,
-                )}
-                alt={`QR Code for treasure ${index + 1}`}
-                className={styles.qrImage}
-              />
-            </a>
+            <QrImage
+              huntId={isCreating ? 0 : originalHunt!.id}
+              treasureId={treasure.originalId!}
+              alt={`QR Code for treasure ${index + 1}`}
+              className={styles.qrImage}
+            />
           )}
         </div>
       </div>
