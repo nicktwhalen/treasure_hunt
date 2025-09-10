@@ -7,6 +7,7 @@ interface QrImageProps {
   treasureId: number;
   alt: string;
   className?: string;
+  clickable?: boolean;
 }
 
 export default function QrImage({
@@ -14,6 +15,7 @@ export default function QrImage({
   treasureId,
   alt,
   className,
+  clickable = true,
 }: QrImageProps) {
   const [imageSrc, setImageSrc] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -68,5 +70,20 @@ export default function QrImage({
     return <div className={className}>Failed to load QR code</div>;
   }
 
-  return <img src={imageSrc} alt={alt} className={className} />;
+  const imageElement = <img src={imageSrc} alt={alt} className={className} />;
+
+  if (clickable && imageSrc) {
+    return (
+      <a
+        href={imageSrc}
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Click to view QR code in full size"
+      >
+        {imageElement}
+      </a>
+    );
+  }
+
+  return imageElement;
 }
