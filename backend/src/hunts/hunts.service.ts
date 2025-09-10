@@ -50,8 +50,9 @@ export class HuntsService {
       // Create treasures if provided
       if (treasures && treasures.length > 0) {
         for (const treasureData of treasures) {
-          // Generate QR code
-          const qrCodeData = this.qrCodeService.generateQrData();
+          // Use provided QR code or generate new one
+          const qrCodeData =
+            treasureData.qrCodeData || this.qrCodeService.generateQrData();
 
           const treasure = manager.create(Treasure, {
             huntId: savedHunt.id,
@@ -94,13 +95,33 @@ export class HuntsService {
 
       // If treasures provided, replace all existing treasures
       if (treasures) {
+        // Get existing treasures to preserve QR codes where possible
+        const existingTreasures = await manager.find(Treasure, {
+          where: { huntId: id },
+          relations: ["clue"],
+          order: { ordinal: "ASC" },
+        });
+
         // Delete existing treasures (and their clues via cascade)
         await manager.delete(Treasure, { huntId: id });
 
-        // Create new treasures
-        for (const treasureData of treasures) {
-          // Generate QR code
-          const qrCodeData = this.qrCodeService.generateQrData();
+        // Create new treasures, preserving QR codes when available
+        for (let i = 0; i < treasures.length; i++) {
+          const treasureData = treasures[i];
+          const existingTreasure = existingTreasures[i]; // Match by position/ordinal
+
+          // Use provided QR code, or preserve existing QR code, or generate new one
+          let qrCodeData: string;
+          if (treasureData.qrCodeData) {
+            // Custom QR code provided by frontend
+            qrCodeData = treasureData.qrCodeData;
+          } else if (existingTreasure?.qrCodeData) {
+            // Preserve existing QR code
+            qrCodeData = existingTreasure.qrCodeData;
+          } else {
+            // Generate new QR code
+            qrCodeData = this.qrCodeService.generateQrData();
+          }
 
           const treasure = manager.create(Treasure, {
             huntId: id,

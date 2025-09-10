@@ -5,6 +5,7 @@ import {
   MinLength,
   IsNumber,
   Min,
+  IsOptional,
 } from "class-validator";
 
 export class CreateTreasureBulkDto {
@@ -17,4 +18,9 @@ export class CreateTreasureBulkDto {
   @MinLength(1, { message: "Clue text must not be empty" })
   @MaxLength(100, { message: "Clue text must be less than 100 characters" })
   clueText: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255, { message: "QR code data must be less than 255 characters" })
+  qrCodeData?: string;
 }

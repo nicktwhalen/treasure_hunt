@@ -24,7 +24,7 @@ export class Treasure {
   @Column({ type: "integer" })
   ordinal: number;
 
-  @Column({ name: "qr_code_data", type: "varchar", length: 255, unique: true })
+  @Column({ name: "qr_code_data", type: "varchar", length: 255 })
   qrCodeData: string;
 
   @CreateDateColumn({ name: "created_at" })

@@ -67,5 +67,5 @@ yarn db:logs
 yarn db:reset
 
 # Connect to database directly
-docker compose exec postgres psql -U postgres -d treasure_hunt
+docker compose exec postgres psql -U treasure_hunt -d treasure_hunt
 ```

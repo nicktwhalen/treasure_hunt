@@ -80,7 +80,6 @@ describe("HuntDetail Page", () => {
     mockApi.getTreasures.mockResolvedValue(mockTreasures);
     mockApi.updateHunt.mockResolvedValue(mockHunt);
     mockApi.createHunt.mockResolvedValue(mockHunt);
-    mockApi.getTreasureQrUrl.mockReturnValue("/test-qr-url");
   });
 
   describe("Rule #1: Save button enable/disable logic", () => {

@@ -29,6 +29,7 @@ describe("HuntsService", () => {
     mockEntityManager = {
       create: jest.fn(),
       save: jest.fn(),
+      find: jest.fn(),
       findOne: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
@@ -233,6 +234,12 @@ describe("HuntsService", () => {
         treasures: [{ ...mockTreasure, clue: mockClue }],
       };
 
+      // Mock existing treasures for QR code preservation
+      const mockExistingTreasures = [
+        { id: 1, huntId: 1, ordinal: 1, qrCodeData: "treasure-123" },
+      ];
+
+      mockEntityManager.find.mockResolvedValue(mockExistingTreasures as any);
       mockEntityManager.update.mockResolvedValue({} as any);
       mockEntityManager.delete.mockResolvedValue({} as any);
       mockEntityManager.create
@@ -258,7 +265,8 @@ describe("HuntsService", () => {
       expect(mockEntityManager.delete).toHaveBeenCalledWith(Treasure, {
         huntId: 1,
       });
-      expect(qrCodeService.generateQrData).toHaveBeenCalledTimes(1);
+      // QR code should be preserved from existing treasure, not generated
+      expect(qrCodeService.generateQrData).toHaveBeenCalledTimes(0);
     });
 
     it("should only update title when no treasures provided", async () => {

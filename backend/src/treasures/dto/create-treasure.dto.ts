@@ -18,4 +18,9 @@ export class CreateTreasureDto {
   @IsString()
   @MaxLength(100, { message: "Clue text must be less than 100 characters" })
   clueText?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255, { message: "QR code data must be less than 255 characters" })
+  qrCodeData?: string;
 }

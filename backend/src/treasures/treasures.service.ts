@@ -57,9 +57,9 @@ export class TreasuresService {
     huntId: number,
     createTreasureDto: CreateTreasureDto,
   ): Promise<Treasure> {
-    // Generate QR code
-    const { qrCodeData, qrCodeImagePath } =
-      await this.qrCodeService.generateQrCode();
+    // Use provided QR code data or generate new one
+    const qrCodeData =
+      createTreasureDto.qrCodeData || this.qrCodeService.generateQrData();
 
     // Determine ordinal if not provided
     let ordinal = createTreasureDto.ordinal;
@@ -77,7 +77,6 @@ export class TreasuresService {
       huntId,
       ordinal,
       qrCodeData,
-      qrCodeImagePath,
     });
 
     const savedTreasure = await this.treasuresRepository.save(treasure);
@@ -131,11 +130,6 @@ export class TreasuresService {
     }
 
     const deletedOrdinal = treasure.ordinal;
-
-    // Delete QR code image
-    if (treasure.qrCodeImagePath) {
-      await this.qrCodeService.deleteQrCodeImage(treasure.qrCodeImagePath);
-    }
 
     // Delete treasure and reorder remaining treasures in a transaction
     await this.treasuresRepository.manager.transaction(async (manager) => {

@@ -70,7 +70,7 @@ class ApiClient {
 
   async createHunt(
     title: string,
-    treasures?: { ordinal: number; clueText: string }[],
+    treasures?: { ordinal: number; clueText: string; qrCodeData?: string }[],
   ): Promise<Hunt> {
     const body: any = { title };
     if (treasures !== undefined) {
@@ -85,7 +85,7 @@ class ApiClient {
   async updateHunt(
     id: number,
     title: string,
-    treasures?: { ordinal: number; clueText: string }[],
+    treasures?: { ordinal: number; clueText: string; qrCodeData?: string }[],
   ): Promise<Hunt> {
     const body: any = { title };
     if (treasures !== undefined) {
