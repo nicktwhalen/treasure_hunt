@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import confetti from "canvas-confetti";
 import { api, Hunt, Treasure } from "../../../../lib/api";
 import Card from "../../../../components/ui/Card";
 import Button from "../../../../components/ui/Button";
@@ -21,6 +22,7 @@ export default function PlayHuntPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showScanner, setShowScanner] = useState(false);
+  const [celebrating, setCelebrating] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -112,12 +114,59 @@ export default function PlayHuntPage() {
       // Treasure found successfully!
       setFoundTreasures((prev) => prev + 1);
 
-      // Move to next treasure or complete hunt
-      if (currentTreasureIndex + 1 < treasures.length) {
-        setCurrentTreasureIndex((prev) => prev + 1);
-      } else {
-        router.push("/hunts");
-      }
+      // Show celebration animation
+      setCelebrating(true);
+
+      // Trigger confetti effect
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+
+      // Additional confetti bursts
+      setTimeout(
+        () =>
+          confetti({
+            particleCount: 50,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+          }),
+        300,
+      );
+
+      setTimeout(
+        () =>
+          confetti({
+            particleCount: 50,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+          }),
+        600,
+      );
+
+      // Wait for celebration, then move to next treasure
+      setTimeout(() => {
+        setCelebrating(false);
+
+        // Move to next treasure or complete hunt
+        if (currentTreasureIndex + 1 < treasures.length) {
+          setCurrentTreasureIndex((prev) => prev + 1);
+        } else {
+          // Hunt completed! Show final celebration
+          confetti({
+            particleCount: 150,
+            spread: 180,
+            origin: { y: 0.5 },
+          });
+
+          setTimeout(() => {
+            router.push("/hunts");
+          }, 1000);
+        }
+      }, 4000); // 4 seconds of celebration
     }
   };
 
@@ -191,6 +240,24 @@ export default function PlayHuntPage() {
         onScan={handleQRScanned}
         onClose={handleCloseScan}
       />
+
+      {/* Celebration Overlay */}
+      {celebrating && (
+        <div className={styles.celebrationOverlay}>
+          <div className={styles.celebrationContent}>
+            <div className={styles.celebrationEmoji}>🎉</div>
+            <div className={styles.celebrationText}>
+              <h2>Treasure Found!</h2>
+              <p>Awesome job, treasure hunter! 🏴‍☠️</p>
+              {currentTreasureIndex + 1 < treasures.length ? (
+                <p>Get ready for the next clue...</p>
+              ) : (
+                <p>Hunt completed! Well done! 🏆</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

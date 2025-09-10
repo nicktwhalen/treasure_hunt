@@ -15,7 +15,15 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
   const [error, setError] = useState<string | null>(null);
   const [hasCamera, setHasCamera] = useState<boolean>(true);
   const [cameras, setCameras] = useState<QrScanner.Camera[]>([]);
-  const [selectedCamera, setSelectedCamera] = useState<string | undefined>();
+  const [selectedCamera, setSelectedCamera] = useState<string | undefined>(
+    () => {
+      // Initialize with stored camera preference
+      if (typeof window !== "undefined") {
+        return localStorage.getItem("qr-scanner-preferred-camera") || undefined;
+      }
+      return undefined;
+    },
+  );
 
   useEffect(() => {
     if (!isOpen || !videoRef.current) return;
@@ -47,15 +55,63 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
         const availableCameras = await QrScanner.listCameras();
         setCameras(availableCameras);
 
-        // Set default camera (prefer back-facing if available)
-        if (!selectedCamera && availableCameras.length > 0) {
-          const backCamera = availableCameras.find(
-            (cam) =>
-              cam.label.toLowerCase().includes("back") ||
-              cam.label.toLowerCase().includes("rear") ||
-              cam.label.toLowerCase().includes("environment"),
-          );
-          setSelectedCamera(backCamera?.id || availableCameras[0].id);
+        // Set default camera (prefer stored preference, then back-facing if available)
+        if (availableCameras.length > 0) {
+          let cameraToUse: string | undefined;
+
+          // First, check if stored preference exists and is still available
+          if (selectedCamera) {
+            const storedCameraExists = availableCameras.find(
+              (cam) => cam.id === selectedCamera,
+            );
+            if (storedCameraExists) {
+              cameraToUse = selectedCamera;
+            }
+          }
+
+          // If no stored preference or stored camera not available, find back camera
+          if (!cameraToUse) {
+            // First try to find camera with environment facing mode
+            let backCamera = availableCameras.find((cam) => {
+              // Check device info for facing mode
+              return (
+                cam.label.toLowerCase().includes("back") ||
+                cam.label.toLowerCase().includes("rear") ||
+                cam.label.toLowerCase().includes("environment") ||
+                cam.label.toLowerCase().includes("world")
+              );
+            });
+
+            // If not found by label, try to use device constraints to identify back camera
+            if (!backCamera && availableCameras.length > 1) {
+              // Usually the back camera is the first one on mobile devices
+              // or the one that's NOT the front camera
+              const frontCamera = availableCameras.find(
+                (cam) =>
+                  cam.label.toLowerCase().includes("front") ||
+                  cam.label.toLowerCase().includes("user") ||
+                  cam.label.toLowerCase().includes("face"),
+              );
+
+              if (frontCamera) {
+                backCamera = availableCameras.find(
+                  (cam) => cam.id !== frontCamera.id,
+                );
+              }
+            }
+
+            // Fallback: if we have multiple cameras, prefer the second one (often back camera on mobile)
+            if (!backCamera && availableCameras.length > 1) {
+              backCamera = availableCameras[1];
+            }
+
+            cameraToUse = backCamera?.id || availableCameras[0].id;
+          }
+
+          // Update state if different from current selection
+          if (cameraToUse !== selectedCamera) {
+            setSelectedCamera(cameraToUse);
+          }
         }
 
         // Create scanner instance
@@ -124,6 +180,10 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
 
   const handleCameraChange = (cameraId: string) => {
     setSelectedCamera(cameraId);
+    // Save camera preference to localStorage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("qr-scanner-preferred-camera", cameraId);
+    }
   };
 
   if (!isOpen) return null;
