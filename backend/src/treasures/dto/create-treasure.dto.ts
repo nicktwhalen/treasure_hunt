@@ -1,0 +1,21 @@
+import {
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+  MinLength,
+  IsOptional,
+  IsNumber,
+  Min,
+} from "class-validator";
+
+export class CreateTreasureDto {
+  @IsOptional()
+  @IsNumber({}, { message: "Ordinal must be a number" })
+  @Min(1, { message: "Ordinal must be at least 1" })
+  ordinal?: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100, { message: "Clue text must be less than 100 characters" })
+  clueText?: string;
+}

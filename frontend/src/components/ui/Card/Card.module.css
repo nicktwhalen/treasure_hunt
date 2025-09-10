@@ -1,0 +1,35 @@
+.card {
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  transition: all var(--animation-duration) var(--animation-easing);
+  
+  @starting-style {
+    opacity: 0;
+    scale: 0.95;
+  }
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.default {
+  box-shadow: var(--shadow-sm);
+}
+
+.elevated {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+@media (hover: hover) {
+  .elevated:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+  }
+}

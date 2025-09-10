@@ -1,0 +1,54 @@
+{
+  "name": "treasure-hunt-app",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"yarn db:up\" \"cd backend && yarn start:dev\" \"cd frontend && yarn dev\"",
+    "build": "cd backend && yarn build && cd ../frontend && yarn build",
+    "start": "concurrently \"cd backend && yarn start:prod\" \"cd frontend && yarn start\"",
+    "test": "cd backend && yarn test && cd ../frontend && yarn test",
+    "test:coverage": "cd backend && yarn test:coverage && cd ../frontend && yarn test:coverage",
+    "prepare": "husky",
+    "check-format": "prettier --check '**/*.ts' '**/*.tsx'",
+    "format": "prettier --write '**/*.ts' '**/*.tsx'",
+    "clean": "rm -rf node_modules yarn.lock backend/dist backend/node_modules frontend/.next frontend/node_modules && yarn cache clean",
+    "lint": "cd backend && yarn lint && cd ../frontend && yarn lint",
+    "type-check": "cd backend && yarn type-check && cd ../frontend && yarn type-check",
+    "db:up": "docker-compose up -d postgres",
+    "db:down": "docker-compose down",
+    "db:logs": "docker-compose logs -f postgres",
+    "db:reset": "docker-compose down -v && docker-compose up -d postgres"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "qr-scanner": "^1.4.2"
+  },
+  "lint-staged": {
+    "**/*.ts": "prettier --write --ignore-unknown",
+    "**/*.tsx": "prettier --write --ignore-unknown"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9.32.0",
+    "eslint-config-next": "15.4.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "lint-staged": "^16.1.4",
+    "prettier": "^3.6.2",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,3 @@
+yarn test
+yarn type-check
+yarn lint-staged

@@ -1,0 +1,107 @@
+/* Hunt Cards */
+.huntCard {
+  background-color: var(--color-surface-accent);
+}
+
+.huntHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.huntHeader .title {
+  color: var(--color-primary);
+  margin: 0;
+  font-size: 1.2rem;
+  font-family: 'Creepster', cursive;
+}
+
+.headerActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.headerActions a,
+.headerActions button {
+  width: 62.5px; /* Fixed width: (130px - 0.5rem gap) / 2 */
+  min-width: 62.5px;
+  max-width: 62.5px;
+}
+
+.headerActions a {
+  display: block;
+  text-decoration: none;
+}
+
+.headerActions a button {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+}
+
+.huntContent {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.detailsSection {
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.treasureCount {
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.date {
+  color: #666;
+}
+
+.actionsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 130px; /* Match the header actions width */
+}
+
+.actions a {
+  width: 100%;
+}
+
+.actions a button {
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .huntContent {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .actionsSection {
+    align-items: stretch;
+  }
+  
+  .actions {
+    flex-direction: row;
+    min-width: auto;
+  }
+}

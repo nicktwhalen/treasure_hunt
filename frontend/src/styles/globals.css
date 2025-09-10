@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Roboto:wght@300;400;500;700&display=swap');
+@import './utilities.css';
+
+:root {
+  /* Color System */
+  --color-primary: #8B4513;         /* Saddle Brown */
+  --color-primary-hover: #7a3e11;   /* Darker brown for hover */
+  --color-primary-light: #a0592f;   /* Lighter brown */
+  --color-primary-dark: #6b3510;    /* Darker brown */
+  
+  --color-secondary: #DAA520;       /* Goldenrod */
+  --color-secondary-hover: #cc9520; /* Darker goldenrod */
+  --color-secondary-light: #e6c955; /* Lighter goldenrod */
+  
+  --color-accent: #FF6347;          /* Tomato */
+  --color-background: #FFF8DC;      /* Cornsilk */
+  --color-surface: #F5F5DC;         /* Beige */
+  --color-surface-accent: #E9F5DA;  /* Light green for card backgrounds */
+  
+  --color-text: #2F4F4F;           /* Dark Slate Gray */
+  --color-text-muted: #696969;     /* Dim Gray */
+  --color-text-light: #8B8B8B;     /* Light gray */
+  
+  --color-success: #32CD32;         /* Lime Green */
+  --color-warning: #FF8C00;         /* Dark Orange */
+  --color-danger: #DC143C;          /* Crimson */
+  --color-danger-hover: #b8133a;    /* Darker crimson */
+  
+  --color-border: #E0E0E0;          /* Light border */
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+
+  /* Typography System */
+  --font-primary: 'Roboto', sans-serif;
+  --font-heading: 'Creepster', cursive;
+  
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 2rem;      /* 32px */
+  --font-size-4xl: 2.5rem;    /* 40px */
+  
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.6;
+  --line-height-loose: 1.8;
+
+  /* Spacing System */
+  --spacing-xs: 0.25rem;      /* 4px */
+  --spacing-sm: 0.5rem;       /* 8px */
+  --spacing-md: 1rem;         /* 16px */
+  --spacing-lg: 1.5rem;       /* 24px */
+  --spacing-xl: 2rem;         /* 32px */
+  --spacing-2xl: 3rem;        /* 48px */
+  --spacing-3xl: 4rem;        /* 64px */
+
+  /* Border Radius */
+  --border-radius: 8px;
+  --border-radius-sm: 4px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(139, 69, 19, 0.15);
+  --shadow-xl: 0 10px 25px rgba(0, 0, 0, 0.3);
+
+  /* Animation System */
+  --animation-duration: 0.25s;
+  --animation-duration-slow: 0.35s;
+  --animation-duration-fast: 0.15s;
+  --animation-easing: ease;
+  --animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-normal);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+  text-align: center;
+  margin: var(--spacing-xl) 0;
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+  margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+  margin: var(--spacing-md) 0 var(--spacing-sm) 0;
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+}

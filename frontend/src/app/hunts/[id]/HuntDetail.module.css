@@ -1,0 +1,159 @@
+/* Hunt Detail Specific Styles */
+
+.treasuresList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Treasure Cards */
+.treasureCard {
+  background-color: var(--color-surface-accent);
+}
+
+.treasureHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.treasureHeader h3 {
+  color: var(--color-primary);
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.treasureContent {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.clueSection {
+  min-width: 0;
+}
+
+.clueSection label,
+.qrSection label {
+  display: block;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+
+.qrSection {
+  text-align: center;
+}
+
+.qrImageLink {
+  display: block;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  line-height: 0;
+}
+
+.qrImageLink:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.qrImage {
+  width: 80px;
+  height: 80px;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  background: white;
+  padding: 0.25rem;
+  transition: border-color 0.2s ease;
+}
+
+.qrImageLink:hover .qrImage {
+  border-color: var(--color-primary);
+}
+
+.qrPlaceholder {
+  width: 80px;
+  height: 80px;
+  border: 2px dashed #ccc;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+}
+
+.qrPlaceholder p {
+  color: #666;
+  text-align: center;
+  font-size: 0.75rem;
+  margin: 0;
+  padding: 0.25rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .header {
+    margin-bottom: 1rem;
+  }
+
+  .titleInput {
+    font-size: 1.5rem;
+    max-width: none;
+  }
+
+  .titleMeta {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .treasuresHeader {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .treasuresHeader h2 {
+    text-align: center;
+  }
+
+  .treasureContent {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .qrSection {
+    text-align: left;
+  }
+
+  .qrImage {
+    width: 60px;
+    height: 60px;
+  }
+
+  .qrImageLink:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Very Small Screens */
+@media (max-width: 480px) {
+  .titleInput {
+    font-size: 1.25rem;
+    padding: 0.75rem;
+  }
+
+  .treasuresHeader h2 {
+    font-size: 1.25rem;
+  }
+
+  .treasureHeader h3 {
+    font-size: 1rem;
+  }
+}

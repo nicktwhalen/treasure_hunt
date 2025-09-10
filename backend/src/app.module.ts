@@ -1,0 +1,31 @@
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import { join } from "path";
+
+import { AppController } from "./app.controller";
+import { DatabaseModule } from "./database/database.module";
+import { HuntsModule } from "./hunts/hunts.module";
+import { TreasuresModule } from "./treasures/treasures.module";
+import { CluesModule } from "./clues/clues.module";
+import { GameModule } from "./game/game.module";
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", "uploads"),
+      serveRoot: "/uploads",
+    }),
+    DatabaseModule,
+    HuntsModule,
+    TreasuresModule,
+    CluesModule,
+    GameModule,
+  ],
+  controllers: [AppController],
+})
+export class AppModule {}
