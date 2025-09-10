@@ -16,3 +16,4 @@ frontend/.next
 frontend/.swc
 frontend/coverage
 frontend/node_modules
+frontend/tsconfig.tsbuildinfo
