@@ -60,6 +60,35 @@
   font-size: var(--font-size-base);
 }
 
+.cameraSelector {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.cameraSelector label {
+  font-weight: 600;
+  color: var(--color-text);
+  min-width: 60px;
+}
+
+.select {
+  flex: 1;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
 .instructions {
   margin-top: var(--spacing-md);
   font-size: var(--font-size-sm);

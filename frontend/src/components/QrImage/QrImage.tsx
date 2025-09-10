@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import QRCode from "qrcode";
 
 interface QrImageProps {
-  huntId: number;
-  treasureId: number;
+  qrCodeData: string;
   alt: string;
   className?: string;
   clickable?: boolean;
 }
 
 export default function QrImage({
-  huntId,
-  treasureId,
+  qrCodeData,
   alt,
   className,
   clickable = true,
@@ -22,45 +21,33 @@ export default function QrImage({
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchImage = async () => {
+    const generateQRCode = async () => {
       try {
-        const API_BASE =
-          process.env.NEXT_PUBLIC_API_BASE ||
-          (process.env.NODE_ENV === "development"
-            ? "http://localhost:3001/api"
-            : "/api");
+        setLoading(true);
+        setError(false);
 
-        const response = await fetch(
-          `${API_BASE}/hunts/${huntId}/treasures/${treasureId}/qr`,
-          {
-            headers: {
-              "ngrok-skip-browser-warning": "true",
-            },
+        const qrCodeUrl = await QRCode.toDataURL(qrCodeData, {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: "#8B4513", // Pirate brown
+            light: "#FFF8DC", // Cornsilk background
           },
-        );
+        });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch image");
-        }
-
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        setImageSrc(url);
+        setImageSrc(qrCodeUrl);
       } catch (err) {
         setError(true);
+        console.error("Error generating QR code:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchImage();
-
-    return () => {
-      if (imageSrc) {
-        URL.revokeObjectURL(imageSrc);
-      }
-    };
-  }, [huntId, treasureId, imageSrc]);
+    if (qrCodeData) {
+      generateQRCode();
+    }
+  }, [qrCodeData]);
 
   if (loading) {
     return <div className={className}>Loading QR code...</div>;

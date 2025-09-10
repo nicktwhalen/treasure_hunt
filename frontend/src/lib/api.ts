@@ -17,7 +17,6 @@ export interface Treasure {
   huntId: number;
   ordinal: number;
   qrCodeData: string;
-  qrCodeImagePath: string;
   createdAt: string;
   updatedAt: string;
   clue?: Clue;
@@ -111,10 +110,6 @@ class ApiClient {
 
   async getTreasure(huntId: number, treasureId: number): Promise<Treasure> {
     return this.request(`/hunts/${huntId}/treasures/${treasureId}`);
-  }
-
-  getTreasureQrUrl(huntId: number, treasureId: number): string {
-    return `${API_BASE}/hunts/${huntId}/treasures/${treasureId}/qr`;
   }
 }
 

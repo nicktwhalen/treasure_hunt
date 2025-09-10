@@ -51,14 +51,12 @@ export class HuntsService {
       if (treasures && treasures.length > 0) {
         for (const treasureData of treasures) {
           // Generate QR code
-          const { qrCodeData, qrCodeImagePath } =
-            await this.qrCodeService.generateQrCode();
+          const qrCodeData = this.qrCodeService.generateQrData();
 
           const treasure = manager.create(Treasure, {
             huntId: savedHunt.id,
             ordinal: treasureData.ordinal,
             qrCodeData,
-            qrCodeImagePath,
           });
           const savedTreasure = await manager.save(treasure);
 
@@ -102,14 +100,12 @@ export class HuntsService {
         // Create new treasures
         for (const treasureData of treasures) {
           // Generate QR code
-          const { qrCodeData, qrCodeImagePath } =
-            await this.qrCodeService.generateQrCode();
+          const qrCodeData = this.qrCodeService.generateQrData();
 
           const treasure = manager.create(Treasure, {
             huntId: id,
             ordinal: treasureData.ordinal,
             qrCodeData,
-            qrCodeImagePath,
           });
           const savedTreasure = await manager.save(treasure);
 

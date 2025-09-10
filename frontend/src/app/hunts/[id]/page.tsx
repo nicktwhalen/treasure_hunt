@@ -26,6 +26,7 @@ const TreasureCard = React.memo<{
   treasure: LocalTreasure;
   index: number;
   originalHunt: Hunt | null;
+  originalTreasures: Treasure[];
   isCreating: boolean;
   showValidationErrors: boolean;
   fieldTouched: Record<string, boolean>;
@@ -39,6 +40,7 @@ const TreasureCard = React.memo<{
     treasure,
     index,
     originalHunt,
+    originalTreasures,
     isCreating,
     showValidationErrors,
     fieldTouched,
@@ -93,8 +95,10 @@ const TreasureCard = React.memo<{
             </div>
           ) : (
             <QrImage
-              huntId={isCreating ? 0 : originalHunt!.id}
-              treasureId={treasure.originalId!}
+              qrCodeData={
+                originalTreasures?.find((t) => t.id === treasure.originalId)
+                  ?.qrCodeData || ""
+              }
               alt={`QR Code for treasure ${index + 1}`}
               className={styles.qrImage}
             />
@@ -483,6 +487,7 @@ export default function HuntDetail() {
                 treasure={treasure}
                 index={index}
                 originalHunt={originalHunt}
+                originalTreasures={originalTreasures}
                 isCreating={isCreating}
                 showValidationErrors={showValidationErrors}
                 fieldTouched={fieldTouched}

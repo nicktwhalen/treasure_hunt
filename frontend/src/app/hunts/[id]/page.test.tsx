@@ -7,6 +7,17 @@ import { api } from "../../../lib/api";
 // Mock the API
 const mockApi = api as jest.Mocked<typeof api>;
 
+// Mock QrImage component to avoid TextEncoder issues in jsdom
+jest.mock("../../../components/QrImage/QrImage", () => {
+  return function MockQrImage({ qrCodeData, alt, className }: any) {
+    return (
+      <div data-testid="qr-image" className={className}>
+        {alt}
+      </div>
+    );
+  };
+});
+
 // Mock next/navigation with parameterized id
 const mockPush = jest.fn();
 jest.mock("next/navigation", () => ({
@@ -28,7 +39,6 @@ const mockHunt = {
       huntId: 1,
       ordinal: 1,
       qrCodeData: "test-qr-1",
-      qrCodeImagePath: "/test1.png",
       createdAt: "2023-01-01T00:00:00Z",
       updatedAt: "2023-01-01T00:00:00Z",
       clue: {

@@ -39,7 +39,7 @@ describe("HuntsService", () => {
     };
 
     const mockQrCodeService = {
-      generateQrCode: jest.fn(),
+      generateQrData: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -170,10 +170,7 @@ describe("HuntsService", () => {
 
       mockEntityManager.findOne.mockResolvedValue(mockFinalHunt as any);
 
-      qrCodeService.generateQrCode.mockResolvedValue({
-        qrCodeData: "treasure-123",
-        qrCodeImagePath: "uploads/qr-codes/treasure-123.png",
-      });
+      qrCodeService.generateQrData.mockReturnValue("treasure-123");
 
       const result = await service.createWithTreasures(
         "Hunt with Treasures",
@@ -182,7 +179,7 @@ describe("HuntsService", () => {
 
       expect(result).toEqual(mockFinalHunt);
       expect(dataSource.transaction).toHaveBeenCalled();
-      expect(qrCodeService.generateQrCode).toHaveBeenCalledTimes(1);
+      expect(qrCodeService.generateQrData).toHaveBeenCalledTimes(1);
       expect(mockEntityManager.create).toHaveBeenCalledTimes(3); // Hunt, Treasure, Clue
       expect(mockEntityManager.save).toHaveBeenCalledTimes(3);
     });
@@ -198,7 +195,7 @@ describe("HuntsService", () => {
       const result = await service.createWithTreasures("Empty Hunt");
 
       expect(result).toEqual(mockFinalHunt);
-      expect(qrCodeService.generateQrCode).not.toHaveBeenCalled();
+      expect(qrCodeService.generateQrData).not.toHaveBeenCalled();
       expect(mockEntityManager.create).toHaveBeenCalledTimes(1); // Only Hunt
     });
   });
@@ -246,10 +243,7 @@ describe("HuntsService", () => {
         .mockResolvedValueOnce(mockClue as any);
       mockEntityManager.findOne.mockResolvedValue(mockUpdatedHunt as any);
 
-      qrCodeService.generateQrCode.mockResolvedValue({
-        qrCodeData: "treasure-456",
-        qrCodeImagePath: "uploads/qr-codes/treasure-456.png",
-      });
+      qrCodeService.generateQrData.mockReturnValue("treasure-456");
 
       const result = await service.updateWithTreasures(
         1,
@@ -264,7 +258,7 @@ describe("HuntsService", () => {
       expect(mockEntityManager.delete).toHaveBeenCalledWith(Treasure, {
         huntId: 1,
       });
-      expect(qrCodeService.generateQrCode).toHaveBeenCalledTimes(1);
+      expect(qrCodeService.generateQrData).toHaveBeenCalledTimes(1);
     });
 
     it("should only update title when no treasures provided", async () => {
@@ -280,7 +274,7 @@ describe("HuntsService", () => {
         title: "Updated Hunt Only",
       });
       expect(mockEntityManager.delete).not.toHaveBeenCalled();
-      expect(qrCodeService.generateQrCode).not.toHaveBeenCalled();
+      expect(qrCodeService.generateQrData).not.toHaveBeenCalled();
     });
   });
 

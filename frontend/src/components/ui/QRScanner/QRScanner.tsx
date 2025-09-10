@@ -14,6 +14,8 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
   const qrScannerRef = useRef<QrScanner | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [hasCamera, setHasCamera] = useState<boolean>(true);
+  const [cameras, setCameras] = useState<QrScanner.Camera[]>([]);
+  const [selectedCamera, setSelectedCamera] = useState<string | undefined>();
 
   useEffect(() => {
     if (!isOpen || !videoRef.current) return;
@@ -41,6 +43,21 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
           return;
         }
 
+        // Get available cameras
+        const availableCameras = await QrScanner.listCameras();
+        setCameras(availableCameras);
+
+        // Set default camera (prefer back-facing if available)
+        if (!selectedCamera && availableCameras.length > 0) {
+          const backCamera = availableCameras.find(
+            (cam) =>
+              cam.label.toLowerCase().includes("back") ||
+              cam.label.toLowerCase().includes("rear") ||
+              cam.label.toLowerCase().includes("environment"),
+          );
+          setSelectedCamera(backCamera?.id || availableCameras[0].id);
+        }
+
         // Create scanner instance
         if (!videoRef.current) {
           setError("Video element not available");
@@ -56,6 +73,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
             returnDetailedScanResult: true,
             highlightScanRegion: true,
             highlightCodeOutline: true,
+            preferredCamera: selectedCamera,
           },
         );
 
@@ -92,7 +110,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
         qrScannerRef.current = null;
       }
     };
-  }, [isOpen, onScan]);
+  }, [isOpen, onScan, selectedCamera]);
 
   useEffect(() => {
     // Stop scanner when component unmounts or closes
@@ -103,6 +121,10 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
       }
     };
   }, []);
+
+  const handleCameraChange = (cameraId: string) => {
+    setSelectedCamera(cameraId);
+  };
 
   if (!isOpen) return null;
 
@@ -136,6 +158,24 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
             </div>
           ) : (
             <>
+              {cameras.length > 1 && (
+                <div className={styles.cameraSelector}>
+                  <label htmlFor="camera-select">Camera:</label>
+                  <select
+                    id="camera-select"
+                    value={selectedCamera || ""}
+                    onChange={(e) => handleCameraChange(e.target.value)}
+                    className={styles.select}
+                  >
+                    {cameras.map((camera) => (
+                      <option key={camera.id} value={camera.id}>
+                        {camera.label || `Camera ${camera.id}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
               <div className={styles.videoContainer}>
                 <video
                   ref={videoRef}

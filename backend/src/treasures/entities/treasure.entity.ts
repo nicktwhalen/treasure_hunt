@@ -27,14 +27,6 @@ export class Treasure {
   @Column({ name: "qr_code_data", type: "varchar", length: 255, unique: true })
   qrCodeData: string;
 
-  @Column({
-    name: "qr_code_image_path",
-    type: "varchar",
-    length: 500,
-    nullable: true,
-  })
-  qrCodeImagePath: string;
-
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
 
