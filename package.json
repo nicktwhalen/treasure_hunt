@@ -19,7 +19,7 @@
     "test": "yarn workspace backend test && yarn workspace frontend test",
     "test:backend": "yarn workspace backend test",
     "test:frontend": "yarn workspace frontend test",
-    "test:coverage": "yarn workspace backend test:coverage && yarn workspace frontend test:coverage",
+    "test:coverage": "yarn workspace backend test:cov && yarn workspace frontend test:coverage",
     "prepare": "husky",
     "check-format": "prettier --check '**/*.ts' '**/*.tsx'",
     "format": "prettier --write '**/*.ts' '**/*.tsx'",
