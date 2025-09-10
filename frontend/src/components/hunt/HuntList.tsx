@@ -69,7 +69,7 @@ export const HuntList: React.FC = () => {
       {/* Info Section */}
       <div className="content-section">
         <Card>
-          <div style={{ padding: "1rem", textAlign: "center" }}>
+          <div style={{ padding: "0.25rem 0.25rem", textAlign: "center" }}>
             <h3 style={{ margin: "0 0 1rem 0", color: "var(--color-primary)" }}>
               🏴‍☠️ Chart yer course! 🏴‍☠️
             </h3>
@@ -77,6 +77,7 @@ export const HuntList: React.FC = () => {
               <strong>Pirates</strong> create treasure hunts with clues to find
               buried treasures, then print QR codes and hide them for brave
               treasure hunters to discover.
+              <br />
               <br />
               <strong>Treasure hunters</strong> follow clues to find hidden
               treasures and scan QR codes to claim their bounty!
