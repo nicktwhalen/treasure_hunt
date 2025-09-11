@@ -12,6 +12,7 @@ export interface QRScannerProps {
 const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const qrScannerRef = useRef<QrScanner | null>(null);
+  const isInitializingRef = useRef<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [hasCamera, setHasCamera] = useState<boolean>(true);
   const [cameras, setCameras] = useState<QrScanner.Camera[]>([]);
@@ -29,8 +30,53 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
     if (!isOpen || !videoRef.current) return;
 
     const startScanner = async () => {
+      // Prevent multiple simultaneous initialization attempts
+      if (isInitializingRef.current) {
+        return;
+      }
+
+      isInitializingRef.current = true;
+
       try {
         setError(null);
+
+        // Clean up any existing scanner first
+        if (qrScannerRef.current) {
+          try {
+            qrScannerRef.current.stop();
+            qrScannerRef.current.destroy();
+          } catch (err) {
+            console.warn("Error cleaning up existing scanner:", err);
+          }
+          qrScannerRef.current = null;
+        }
+
+        // Ensure video element is ready and properly reset
+        if (videoRef.current) {
+          try {
+            // Stop any existing media stream
+            if (videoRef.current.srcObject) {
+              const stream = videoRef.current.srcObject as MediaStream;
+              stream.getTracks().forEach((track) => track.stop());
+            }
+
+            videoRef.current.srcObject = null;
+            videoRef.current.src = "";
+
+            // Wait for any pending play promises to resolve
+            await new Promise((resolve) => {
+              videoRef.current!.addEventListener("loadstart", resolve, {
+                once: true,
+              });
+              videoRef.current!.load();
+            });
+          } catch (err) {
+            console.warn("Error resetting video element:", err);
+          }
+        }
+
+        // Longer delay to ensure all cleanup is complete
+        await new Promise((resolve) => setTimeout(resolve, 300));
 
         // First, request camera permission explicitly
         try {
@@ -153,6 +199,8 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
         } else {
           setError(`Failed to access camera: ${errorMessage}`);
         }
+      } finally {
+        isInitializingRef.current = false;
       }
     };
 
@@ -160,10 +208,33 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
 
     // Cleanup function
     return () => {
+      isInitializingRef.current = false;
+
       if (qrScannerRef.current) {
-        qrScannerRef.current.stop();
-        qrScannerRef.current.destroy();
+        try {
+          qrScannerRef.current.stop();
+          qrScannerRef.current.destroy();
+        } catch (err) {
+          console.warn("Error cleaning up QR scanner:", err);
+        }
         qrScannerRef.current = null;
+      }
+
+      // Also clean up video element and media streams
+      if (videoRef.current) {
+        try {
+          // Stop any active media streams
+          if (videoRef.current.srcObject) {
+            const stream = videoRef.current.srcObject as MediaStream;
+            stream.getTracks().forEach((track) => track.stop());
+          }
+
+          videoRef.current.srcObject = null;
+          videoRef.current.src = "";
+          videoRef.current.load();
+        } catch (err) {
+          console.warn("Error cleaning up video element:", err);
+        }
       }
     };
   }, [isOpen, onScan, selectedCamera]);
@@ -172,8 +243,12 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
     // Stop scanner when component unmounts or closes
     return () => {
       if (qrScannerRef.current) {
-        qrScannerRef.current.stop();
-        qrScannerRef.current.destroy();
+        try {
+          qrScannerRef.current.stop();
+          qrScannerRef.current.destroy();
+        } catch (err) {
+          console.warn("Error during unmount cleanup:", err);
+        }
       }
     };
   }, []);

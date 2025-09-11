@@ -138,7 +138,7 @@ describe("HuntDetail Page", () => {
       });
 
       // Add treasure
-      const addButton = screen.getByText("+ Add Treasure");
+      const addButton = screen.getByText("Add Treasure");
       await userEvent.click(addButton);
 
       const saveButton = screen.getByText("Save");
@@ -235,11 +235,11 @@ describe("HuntDetail Page", () => {
 
       // Wait for initial load
       await waitFor(() => {
-        expect(screen.getByText("+ Add Treasure")).toBeInTheDocument();
+        expect(screen.getByText("Add Treasure")).toBeInTheDocument();
       });
 
       // Add treasure but don't populate clue
-      const addButton = screen.getByText("+ Add Treasure");
+      const addButton = screen.getByText("Add Treasure");
       await userEvent.click(addButton);
 
       // Try to save
@@ -296,11 +296,11 @@ describe("HuntDetail Page", () => {
 
       // Wait for initial load
       await waitFor(() => {
-        expect(screen.getByText("+ Add Treasure")).toBeInTheDocument();
+        expect(screen.getByText("Add Treasure")).toBeInTheDocument();
       });
 
       // Add treasure
-      const addButton = screen.getByText("+ Add Treasure");
+      const addButton = screen.getByText("Add Treasure");
       await userEvent.click(addButton);
 
       // Find the new treasure's clue input (it should be empty)
@@ -401,7 +401,7 @@ describe("HuntDetail Page", () => {
         await userEvent.type(titleInput, "New Hunt");
 
         // Add treasure without clue
-        const addButton = screen.getByText("+ Add Treasure");
+        const addButton = screen.getByText("Add Treasure");
         await userEvent.click(addButton);
 
         // Try to save

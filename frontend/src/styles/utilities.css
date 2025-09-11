@@ -79,13 +79,10 @@
   }
 
   .section-header {
-    flex-direction: column;
-    align-items: stretch;
     gap: 1rem;
   }
 
   .section-header h2 {
-    text-align: center;
     font-size: 1.25rem;
   }
 

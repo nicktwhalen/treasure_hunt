@@ -150,14 +150,14 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 20vh;
+  padding-top: 10vh;
   z-index: 1000;
   animation: fadeIn 0.3s ease-in;
 }
 
 .celebrationContent {
   background: white;
-  padding: 3rem;
+  padding: 1.5rem;
   border-radius: 1rem;
   text-align: center;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -183,6 +183,12 @@
   font-size: 1.1rem;
   color: #5a4037;
   margin: 0.5rem 0;
+}
+
+.celebrationActions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
 }
 
 
@@ -228,8 +234,12 @@
 
 /* Responsive Celebration */
 @media (max-width: 768px) {
+  .celebrationOverlay {
+    padding-top: 5vh;
+  }
+
   .celebrationContent {
-    padding: 2rem;
+    padding: 1.25rem;
     margin: 1rem;
   }
 
@@ -247,8 +257,12 @@
 }
 
 @media (max-width: 480px) {
+  .celebrationOverlay {
+    padding-top: 3vh;
+  }
+
   .celebrationContent {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 
   .celebrationEmoji {

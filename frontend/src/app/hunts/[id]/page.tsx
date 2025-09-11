@@ -534,7 +534,7 @@ export default function HuntDetail() {
         <div className="section-header">
           <h2>📦 Treasures ({activeTreasures.length})</h2>
           <Button variant="primary" onClick={handleAddTreasure}>
-            + Add Treasure
+            Add Treasure
           </Button>
         </div>
 

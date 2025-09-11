@@ -23,6 +23,8 @@ export default function PlayHuntPage() {
   const [error, setError] = useState<string | null>(null);
   const [showScanner, setShowScanner] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
+  const [wrongTreasure, setWrongTreasure] = useState(false);
+  const [continuousConfetti, setContinuousConfetti] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -49,6 +51,25 @@ export default function PlayHuntPage() {
 
     loadHuntData();
   }, [id]);
+
+  // Continuous confetti effect for final treasure
+  useEffect(() => {
+    if (!continuousConfetti) return;
+
+    const interval = setInterval(() => {
+      const randomX = Math.random();
+      const randomParticles = Math.floor(Math.random() * 40) + 30; // 30-70 particles
+
+      confetti({
+        particleCount: randomParticles,
+        spread: Math.floor(Math.random() * 60) + 50, // 50-110 spread
+        origin: { x: randomX, y: 0.1 + Math.random() * 0.3 }, // Random position
+        colors: ["#FFD700", "#FF6B35", "#F7931E", "#C5E063", "#06FFA5"],
+      });
+    }, 600); // Every 600ms
+
+    return () => clearInterval(interval);
+  }, [continuousConfetti]);
 
   if (loading) {
     return (
@@ -107,7 +128,13 @@ export default function PlayHuntPage() {
 
     // Validate the scanned QR code
     const currentTreasure = treasures[currentTreasureIndex];
-    if (!currentTreasure) return;
+    if (!currentTreasure) {
+      console.error(
+        "No current treasure found at index:",
+        currentTreasureIndex,
+      );
+      return;
+    }
 
     // Check if the scanned QR matches the current treasure's QR code data
     if (qrData === currentTreasure.qrCodeData) {
@@ -117,56 +144,23 @@ export default function PlayHuntPage() {
       // Show celebration animation
       setCelebrating(true);
 
-      // Trigger confetti effect
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-      });
+      // Check if this is the last treasure
+      if (currentTreasureIndex + 1 === treasures.length) {
+        // Last treasure - start continuous confetti
+        setContinuousConfetti(true);
+      } else {
+        // Regular treasure - single large confetti burst
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.5 },
+        });
+      }
 
-      // Additional confetti bursts
-      setTimeout(
-        () =>
-          confetti({
-            particleCount: 50,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0 },
-          }),
-        300,
-      );
-
-      setTimeout(
-        () =>
-          confetti({
-            particleCount: 50,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1 },
-          }),
-        600,
-      );
-
-      // Wait for celebration, then move to next treasure
-      setTimeout(() => {
-        setCelebrating(false);
-
-        // Move to next treasure or complete hunt
-        if (currentTreasureIndex + 1 < treasures.length) {
-          setCurrentTreasureIndex((prev) => prev + 1);
-        } else {
-          // Hunt completed! Show final celebration
-          confetti({
-            particleCount: 150,
-            spread: 180,
-            origin: { y: 0.5 },
-          });
-
-          setTimeout(() => {
-            router.push("/hunts");
-          }, 1000);
-        }
-      }, 4000); // 4 seconds of celebration
+      // Celebration will stay up until user clicks button
+    } else {
+      // Show wrong treasure modal
+      setWrongTreasure(true);
     }
   };
 
@@ -176,6 +170,23 @@ export default function PlayHuntPage() {
 
   const handleBackToHunts = () => {
     router.push("/hunts");
+  };
+
+  const handleContinueFromCelebration = () => {
+    // Move to next treasure or complete hunt
+    if (currentTreasureIndex + 1 < treasures.length) {
+      setCelebrating(false);
+      setCurrentTreasureIndex((prev) => prev + 1);
+    } else {
+      // Hunt completed! Stop continuous confetti and navigate back
+      setContinuousConfetti(false);
+      setCelebrating(false);
+      router.push("/hunts");
+    }
+  };
+
+  const handleTryAgain = () => {
+    setWrongTreasure(false);
   };
 
   return (
@@ -241,19 +252,48 @@ export default function PlayHuntPage() {
         onClose={handleCloseScan}
       />
 
-      {/* Celebration Overlay */}
-      {celebrating && (
+      {/* Result Modals */}
+      {(celebrating || wrongTreasure) && (
         <div className={styles.celebrationOverlay}>
           <div className={styles.celebrationContent}>
-            <div className={styles.celebrationEmoji}>🎉</div>
+            <div className={styles.celebrationEmoji}>
+              {celebrating ? "🎉" : "🏴‍☠️"}
+            </div>
             <div className={styles.celebrationText}>
-              <h2>Treasure Found!</h2>
-              <p>Awesome job, treasure hunter! 🏴‍☠️</p>
-              {currentTreasureIndex + 1 < treasures.length ? (
-                <p>Get ready for the next clue...</p>
+              {celebrating ? (
+                <>
+                  <h2>Treasure Found!</h2>
+                  <p>Awesome job, treasure hunter!</p>
+                  {currentTreasureIndex + 1 < treasures.length ? (
+                    <p>Get ready for the next clue...</p>
+                  ) : (
+                    <p>Hunt completed! Well done! 🏆</p>
+                  )}
+                </>
               ) : (
-                <p>Hunt completed! Well done! 🏆</p>
+                <>
+                  <h2>Arrr, Wrong Treasure!</h2>
+                  <p>This be not the treasure ye seek, matey!</p>
+                  <p>
+                    Keep searching the seven seas... the real treasure awaits!
+                    ⚓
+                  </p>
+                </>
               )}
+            </div>
+            <div className={styles.celebrationActions}>
+              <Button
+                variant="primary"
+                onClick={
+                  celebrating ? handleContinueFromCelebration : handleTryAgain
+                }
+              >
+                {celebrating
+                  ? currentTreasureIndex + 1 < treasures.length
+                    ? "Let's Go!"
+                    : "Go Back"
+                  : "Try Again"}
+              </Button>
             </div>
           </div>
         </div>

@@ -92,16 +92,16 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .huntContent {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
     gap: 1rem;
   }
   
   .actionsSection {
-    align-items: stretch;
+    align-items: flex-end;
   }
   
   .actions {
-    flex-direction: row;
+    width: 130px;
     min-width: auto;
   }
 }

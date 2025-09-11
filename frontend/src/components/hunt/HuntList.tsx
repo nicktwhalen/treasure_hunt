@@ -91,7 +91,7 @@ export const HuntList: React.FC = () => {
         <div className="section-header">
           <h2>🏴‍☠️ Your Hunts ({hunts.length})</h2>
           <Link href="/hunts/new" passHref>
-            <Button variant="primary">+ Create Hunt</Button>
+            <Button variant="primary">New Hunt</Button>
           </Link>
         </div>
 
