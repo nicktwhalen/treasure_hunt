@@ -36,8 +36,7 @@
     "db:reset": "docker-compose down -v && docker-compose up -d postgres"
   },
   "dependencies": {
-    "concurrently": "^8.2.2",
-    "qr-scanner": "^1.4.2"
+    "concurrently": "^8.2.2"
   },
   "lint-staged": {
     "**/*.ts": "prettier --write --ignore-unknown",
