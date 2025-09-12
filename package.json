@@ -30,13 +30,16 @@
     "type-check": "yarn workspace backend type-check && yarn workspace frontend type-check",
     "type-check:backend": "yarn workspace backend type-check",
     "type-check:frontend": "yarn workspace frontend type-check",
+    "data:export": "node export_data.js",
+    "data:import": "node import_data.js",
     "db:up": "docker-compose up -d postgres",
     "db:down": "docker-compose down",
     "db:logs": "docker-compose logs -f postgres",
     "db:reset": "docker-compose down -v && docker-compose up -d postgres"
   },
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "node-fetch": "^3.3.2"
   },
   "lint-staged": {
     "**/*.ts": "prettier --write --ignore-unknown",

@@ -2,6 +2,7 @@
 CLAUDE.md
 .vscode
 node_modules
+treasure_export.csv*
 
 backend/.env*
 !backend/.env.example
