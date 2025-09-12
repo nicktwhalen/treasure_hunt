@@ -17,7 +17,7 @@ export class Clue {
   @Column({ name: "treasure_id" })
   treasureId: number;
 
-  @Column({ type: "text", nullable: false })
+  @Column({ type: "varchar", length: 200, nullable: true })
   text: string;
 
   @CreateDateColumn({ name: "created_at" })

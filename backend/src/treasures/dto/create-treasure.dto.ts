@@ -16,7 +16,7 @@ export class CreateTreasureDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(100, { message: "Clue text must be less than 100 characters" })
+  @MaxLength(200, { message: "Clue text must be less than 200 characters" })
   clueText?: string;
 
   @IsOptional()

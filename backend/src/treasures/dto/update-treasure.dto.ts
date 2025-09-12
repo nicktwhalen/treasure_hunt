@@ -17,6 +17,6 @@ export class UpdateTreasureDto {
   @IsNotEmpty({ message: "Clue text cannot be empty" })
   @IsString()
   @MinLength(1, { message: "Clue text must not be empty" })
-  @MaxLength(100, { message: "Clue text must be less than 100 characters" })
+  @MaxLength(200, { message: "Clue text must be less than 200 characters" })
   clueText: string;
 }
