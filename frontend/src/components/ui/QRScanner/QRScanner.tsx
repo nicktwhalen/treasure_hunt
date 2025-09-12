@@ -253,12 +253,27 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose, isOpen }) => {
     };
   }, []);
 
-  const handleCameraChange = (cameraId: string) => {
+  const handleCameraChange = async (cameraId: string) => {
+    // Stop current scanner first
+    if (qrScannerRef.current) {
+      try {
+        qrScannerRef.current.stop();
+        qrScannerRef.current.destroy();
+      } catch (err) {
+        console.warn("Error stopping current scanner:", err);
+      }
+      qrScannerRef.current = null;
+    }
+
+    // Update selected camera
     setSelectedCamera(cameraId);
+
     // Save camera preference to localStorage
     if (typeof window !== "undefined") {
       localStorage.setItem("qr-scanner-preferred-camera", cameraId);
     }
+
+    // The useEffect will automatically restart with the new camera
   };
 
   if (!isOpen) return null;
